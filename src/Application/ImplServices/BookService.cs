@@ -19,14 +19,12 @@ public class BookService : IBookService
     {
         var books = await _bookRepository.GetAllAsync();
 
-        var bookDtos = books.Select(book => new BookWithAuthorDto(book.Id,
+        return books.Select(book => new BookWithAuthorDto(book.Id,
             book.Title,
             book.Authors.Select(author => new AuthorDto(
                 author.Id,
                 author.Name
         )).ToList())).ToList();
-
-        return bookDtos;
     }
     
 }
