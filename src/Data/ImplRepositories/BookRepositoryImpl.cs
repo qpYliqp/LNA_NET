@@ -20,6 +20,6 @@ public class BookRepositoryImpl : IBookRepository
 
     public async Task<IEnumerable<Book>> GetAllAsync()
     {
-        return await _dbContext.Books.ToListAsync();
+        return await _dbContext.Books.Include(b => b.Authors).ToListAsync();
     }
 }
