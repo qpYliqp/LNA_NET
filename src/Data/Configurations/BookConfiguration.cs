@@ -10,8 +10,7 @@ public class BookConfiguration : IEntityTypeConfiguration<Book>
     {
 
         builder.HasKey(b => b.Id);
-
-        // 3. Exemple de données de départ (Seeding)
+        
         builder.HasData(
             new Book { Id = 1, Title = "One Piece" }
         );

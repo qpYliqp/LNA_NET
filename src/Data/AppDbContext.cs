@@ -16,6 +16,9 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        //ApplyConfigurationFromAssembly --> fournie par EF --> Exécute une tâche spécifique lors de la phase de construction du modèle de données.
+        //Scan Data.dll pour trouver les classes qui implémentent IEntityTypeConfiguration<Entity>
+        //Pour chaque classe trouvé --> applique la méthode Configure()
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);    }
     
 }

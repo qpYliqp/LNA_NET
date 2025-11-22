@@ -1,0 +1,3 @@
+﻿Une méthode d'extension est une fonctionnalité permettant d'ajouter de nouvelles méthodes à des types existants.
+
+-Permet d'ajouter de nouvelles méthodes sans avoir à modifier le code source original du type.
