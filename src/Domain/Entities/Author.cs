@@ -1,9 +1,9 @@
 ﻿namespace Domain.Entities;
 
-public class Book
+public class Author
 {
     public int Id { get; set; }
-    public String Title { get; set; }
+    public string Name { get; set; }
     
     public ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
 }
