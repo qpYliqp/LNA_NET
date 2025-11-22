@@ -1,0 +1,15 @@
+﻿services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: LNAnetDB
+      POSTGRES_USER: LNAnet
+      POSTGRES_PASSWORD: LNAnet
+    ports:
+      - "5000:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data:

@@ -1,0 +1,29 @@
+# -------------------------------------------------------------------
+# Fichiers et dossiers GÉNÉRÉS par la compilation (ESSENTIEL)
+# -------------------------------------------------------------------
+[Bb]in/        
+[Oo]bj/        
+*/[Aa]utogen
+*/*.FileListAbsolute.txt
+
+# -------------------------------------------------------------------
+# Fichiers et dossiers liés au packaging et dépendances
+# -------------------------------------------------------------------
+# Fichiers de packages NuGet (s'ils ne sont pas restaurés par le build)
+*.nupkg
+# Dossier de cache des packages restaurés (très volumineux)
+.nuget/
+# Fichiers de cache de dépendances lock.json
+project.assets.json
+
+.idea/            
+/shelf/
+/workspace.xml
+/modules.xml
+/contentModel.xml
+/.idea.API_TRAINING.iml
+/projectSettingsUpdater.xml
+/queries/
+/dataSources/
+/dataSources.local.xml
+/httpRequests/
