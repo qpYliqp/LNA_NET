@@ -1,40 +1,25 @@
 ﻿using Application.DTOs.BookDTO;
+using Application.Features.Books.GetAllBookWithAuthor;
 using Application.IServices;
 using Domain.Entities;
 using Data.ImplRepositories;
 using Domain.IRepositories;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BookController : ControllerBase
+public class BookController(IMediator mediator) : ControllerBase
 {
-
-    private readonly IBookService _bookService;
-    
-    public BookController(IBookService bookService)
-    {
-        this._bookService = bookService;
-    }
-
-    // public BookController(IBookRepository repository)
-    // {
-    //     this._bookRepository = repository;
-    // }
-    //
-    //
-    // [HttpGet]
-    // public Task<IEnumerable<Book>> GetAllAsync()
-    // {
-    //     return this._bookRepository.GetAllAsync();
-    // }
+    private readonly IMediator _mediator = mediator;    
     
     [HttpGet]
-    public Task<IReadOnlyList<BookWithAuthorDto>> GetAllBookWithAuthorAsync()
+    public async Task<IActionResult> GetAllBookWithAuthorAsync()
     {
-        return this._bookService.GetAllBookWithAuthor();
-    }
+        var query = new GetAllBookWithAuthorQuery(); 
+        var result = await _mediator.Send(query);
+        return Ok(result);    }
     
 }

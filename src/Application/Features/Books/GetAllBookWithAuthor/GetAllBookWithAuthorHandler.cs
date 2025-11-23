@@ -1,17 +1,18 @@
 ﻿using Application.DTOs.AuthorDTO;
 using Application.DTOs.BookDTO;
-using Application.IServices;
 using Data;
-using Domain.IRepositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.ImplServices;
+namespace Application.Features.Books.GetAllBookWithAuthor;
 
-public class BookService(AppDbContext dbContext) : IBookService{
+public class GetAllBookWithAuthorHandler(AppDbContext dbContext) : IRequestHandler<GetAllBookWithAuthorQuery, IReadOnlyList<BookWithAuthorDto>>
+{
     
     private readonly AppDbContext _dbContext = dbContext;
 
-    public async Task<IReadOnlyList<BookWithAuthorDto>> GetAllBookWithAuthor()
+    public async Task<IReadOnlyList<BookWithAuthorDto>> Handle(GetAllBookWithAuthorQuery request,
+        CancellationToken cancellationToken)
     {
         return await _dbContext.Books
             .Include(b => b.Authors) 
@@ -23,7 +24,7 @@ public class BookService(AppDbContext dbContext) : IBookService{
                     author.Name
                 )).ToList() 
             ))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
     
 }

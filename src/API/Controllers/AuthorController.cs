@@ -9,18 +9,5 @@ namespace API.Controllers;
 public class AuthorController : ControllerBase
 {
     
-    private readonly IAuthorRepository _authorRepository;
-
-    public AuthorController(IAuthorRepository repository)
-    {
-        this._authorRepository = repository;
-    }
-    
-    
-    [HttpGet]
-    public Task<IEnumerable<Author>> GetAllAsync()
-    {
-        return this._authorRepository.GetAllAsync();
-    }
     
 }

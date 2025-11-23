@@ -11,9 +11,11 @@ public static class ServiceCollectionExtensions
     //Étend le type IServiceCollection
     public static IServiceCollection AddDataServices(this IServiceCollection services)
     {
-        services.AddScoped<IBookRepository, BookRepositoryImpl>();
-        services.AddScoped<IAuthorRepository, AuthorRepositoryImpl>();
+        services.AddScoped<IBookRepository, BookRepository>();
+        services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<IBookService, BookService>();
+        services.AddMediatR(cfg => 
+            cfg.RegisterServicesFromAssembly(typeof(IBookService).Assembly));
         return services;
     }
 }
