@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.BookDTO;
+using Application.Features.Books.CreateBookWithAuthor;
 using Application.Features.Books.GetAllBookWithAuthor;
 using Application.IServices;
 using Domain.Entities;
@@ -20,6 +21,15 @@ public class BookController(IMediator mediator) : ControllerBase
     {
         var query = new GetAllBookWithAuthorQuery(); 
         var result = await _mediator.Send(query);
-        return Ok(result);    }
+        return Ok(result);    
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> CreateBookWithAuthorAsync([FromBody] CreateBookRequestDto request)
+    {
+        var query = new CreateBookWithAuthorQuery(request); 
+        var result = await _mediator.Send(query);
+        return Ok(result);    
+    }
     
 }

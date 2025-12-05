@@ -22,7 +22,6 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        // Ceci est l'appel clé : il applique toutes les migrations en attente,
         context.Database.Migrate();
     }
     catch (Exception ex)
