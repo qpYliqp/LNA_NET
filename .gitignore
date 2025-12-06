@@ -27,3 +27,4 @@ project.assets.json
 /dataSources/
 /dataSources.local.xml
 /httpRequests/
+.vs/
