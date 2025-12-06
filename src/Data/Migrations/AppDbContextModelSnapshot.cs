@@ -91,6 +91,23 @@ namespace Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Entities.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Status");
+                });
+
             modelBuilder.Entity("AuthorBook", b =>
                 {
                     b.HasOne("Domain.Entities.Author", null)
