@@ -32,10 +32,10 @@ public class BookController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("getAllBookLetterWithDetails")]
-    public async Task<IActionResult> GetAllBookLetterWithDetails()
+    [HttpGet("letter")]
+    public async Task<IActionResult> GetAllBookLetterByLetter()
     {
-        var query = new GetAllBookLetterWithDetailsQuery(); 
+        var query = new GetAllBookLetterByLetterQuery();
         var result = await _mediator.Send(query);
         return Ok(result);    
     }

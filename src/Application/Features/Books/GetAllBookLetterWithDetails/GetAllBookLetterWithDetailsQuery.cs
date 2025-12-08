@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Application.Features.Books.GetAllBookWithAuthor;
 
-public record GetAllBookLetterWithDetailsQuery()
+public record GetAllBookLetterByLetterQuery()
        : IRequest<IDictionary<string, List<BookLetterWithDetailsDto>>>;

@@ -6,14 +6,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 
-namespace Application.Features.Books.GetAllBookLetterWithDetails;
+namespace Application.Features.Books.GetAllBookLetterByLetter;
 
-public class GetAllBookLetterWithDetailsHandler(AppDbContext dbContext) : IRequestHandler<GetAllBookLetterWithDetailsQuery, IDictionary<string, List<BookLetterWithDetailsDto>>>
+public class GetAllBookLetterByLetterHandler(AppDbContext dbContext) : IRequestHandler<GetAllBookLetterByLetterQuery, IDictionary<string, List<BookLetterWithDetailsDto>>>
 {
 
     private readonly AppDbContext _dbContext = dbContext;
 
-    public async Task<IDictionary<string, List<BookLetterWithDetailsDto>>> Handle(GetAllBookLetterWithDetailsQuery request, CancellationToken cancellationToken)
+    public async Task<IDictionary<string, List<BookLetterWithDetailsDto>>> Handle(GetAllBookLetterByLetterQuery request, CancellationToken cancellationToken)
     {
         var books = await _dbContext.Books
             .OrderBy(b => b.Title)
