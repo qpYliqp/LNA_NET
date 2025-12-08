@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.Configurations;
 using Domain.Entities;
+using System.Runtime.CompilerServices;
 
 public class BookConfiguration : IEntityTypeConfiguration<Book>
 {
@@ -11,16 +12,11 @@ public class BookConfiguration : IEntityTypeConfiguration<Book>
 
         builder.HasKey(b => b.Id);
 
-        builder.HasData(
-            new Book { Id = 1, Title = "One Piece" }
-        );
-        
+        builder.Property(b => b.GlobalStatusId)
+           .HasDefaultValue(1);
+
         builder
-            .HasMany(b => b.Authors) 
-            .WithMany(a => a.Books)
-            .UsingEntity(j => j.HasData(
-                new { BooksId = 1, AuthorsId = 1 } 
-            ));
+            .HasMany(b => b.Authors)
+            .WithMany(a => a.Books);
     }
-    
 }

@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 namespace Data;
 
-public class AppDbContextFactory
+public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
     
     public AppDbContext CreateDbContext(string[] args)
