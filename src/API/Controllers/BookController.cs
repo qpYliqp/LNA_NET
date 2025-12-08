@@ -16,7 +16,7 @@ public class BookController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;    
     
-    [HttpGet]
+    [HttpGet("getAllBookWithAuthor")]
     public async Task<IActionResult> GetAllBookWithAuthorAsync()
     {
         var query = new GetAllBookWithAuthorQuery(); 
@@ -29,7 +29,14 @@ public class BookController(IMediator mediator) : ControllerBase
     {
         var query = new CreateBookWithAuthorQuery(request); 
         var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpGet("getAllBookLetterWithDetails")]
+    public async Task<IActionResult> GetAllBookLetterWithDetails()
+    {
+        var query = new GetAllBookLetterWithDetailsQuery(); 
+        var result = await _mediator.Send(query);
         return Ok(result);    
     }
-    
 }
