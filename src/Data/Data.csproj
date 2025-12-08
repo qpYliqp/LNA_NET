@@ -29,6 +29,8 @@
   <ItemGroup>
     <None Remove="Seeds\DataSeed.sql" />
     <EmbeddedResource Include="Seeds\DataSeed.sql" />
+    <None Remove="Seeds\StatusInitData.sql" />
+    <EmbeddedResource Include="Seeds\StatusInitData.sql" />
   </ItemGroup>
 
 </Project>
