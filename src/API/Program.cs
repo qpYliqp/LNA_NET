@@ -1,11 +1,14 @@
 using API.Extensions;
 using Data;
 using Microsoft.EntityFrameworkCore;
+using Amazon.S3;
+using Amazon.S3.Model;
+using Application.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddDataServices();
+builder.Services.AddDataServices(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -15,7 +18,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
 });
-
 
 var app = builder.Build();
 
@@ -31,6 +33,16 @@ using (var scope = app.Services.CreateScope())
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred during database migration.");
+    }
+    try
+    {
+        var initializer = scope.ServiceProvider.GetRequiredService<IMinioInitializationService>();
+        await initializer.EnsureBucketsExistAsync();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred Minio Bucket Initialization.");
     }
 }
 

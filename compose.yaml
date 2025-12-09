@@ -10,6 +10,21 @@
       - "5000:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+        
+  minio:
+    image: minio/minio
+    container_name: minionet
+    ports:
+      - "2000:9000"
+      - "2001:2001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password123
+    volumes:
+      - minionet_data:/data
+    command: server /data --console-address ":2001"
+    restart: unless-stopped
 
 volumes:
   postgres_data:
+  minionet_data:
