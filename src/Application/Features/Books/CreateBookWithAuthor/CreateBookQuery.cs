@@ -4,6 +4,6 @@ using MediatR;
 namespace Application.Features.Books.CreateBookWithAuthor;
 
 
-public record CreateBookWithAuthorQuery(
+public record CreateBookQuery(
     CreateBookRequestDto BookDetails
-) : IRequest<BookWithAuthorDto>;
+) : IRequest<BookDto>;

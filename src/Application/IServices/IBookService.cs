@@ -6,6 +6,6 @@ namespace Application.IServices;
 public interface IBookService
 {
     
-    public Task<IReadOnlyList<BookWithAuthorDto>> GetAllBookWithAuthor();
+    public Task<IReadOnlyList<BookDto>> GetAllBookWithAuthor();
     
 }

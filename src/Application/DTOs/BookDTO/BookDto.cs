@@ -3,7 +3,7 @@
 namespace Application.DTOs.BookDTO;
 using Domain.Entities;
 
-public record BookWithAuthorDto(
+public record BookDto(
     int Id,
     string Title,
     ICollection<AuthorDto> Authors);

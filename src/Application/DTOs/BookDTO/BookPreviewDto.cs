@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.DTOs.BookDTO
 {
-    public record BookLetterWithDetailsDto(
+    public record BookPreviewDto(
         int Id,
         string Title);
 }

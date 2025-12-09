@@ -11,11 +11,11 @@ public class BookService(AppDbContext dbContext) : IBookService{
     
     private readonly AppDbContext _dbContext = dbContext;
 
-    public async Task<IReadOnlyList<BookWithAuthorDto>> GetAllBookWithAuthor()
+    public async Task<IReadOnlyList<BookDto>> GetAllBookWithAuthor()
     {
         return await _dbContext.Books
             .Include(b => b.Authors) 
-            .Select(book => new BookWithAuthorDto(
+            .Select(book => new BookDto(
                 book.Id,
                 book.Title,
                 book.Authors.Select(author => new AuthorDto(

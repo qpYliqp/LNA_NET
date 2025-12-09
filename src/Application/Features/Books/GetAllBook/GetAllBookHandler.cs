@@ -4,25 +4,24 @@ using Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Features.Books.GetAllBookWithAuthor;
+namespace Application.Features.Books.GetAllBook;
 
-public class GetAllBookWithAuthorHandler(AppDbContext dbContext) : IRequestHandler<GetAllBookWithAuthorQuery, IReadOnlyList<BookWithAuthorDto>>
+public class GetAllBookHandler(AppDbContext dbContext) : IRequestHandler<GetAllBookQuery, IReadOnlyList<BookDto>>
 {
     
     private readonly AppDbContext _dbContext = dbContext;
 
-    public async Task<IReadOnlyList<BookWithAuthorDto>> Handle(GetAllBookWithAuthorQuery request,
+    public async Task<IReadOnlyList<BookDto>> Handle(GetAllBookQuery request,
         CancellationToken cancellationToken)
     {
         return await _dbContext.Books
             .Include(b => b.Authors) 
-            .Select(book => new BookWithAuthorDto(
+            .Select(book => new BookDto(
                 book.Id,
                 book.Title,
                 book.Authors.Select(author => new AuthorDto(
                     author.Id,
-                    author.Name
-                )).ToList() 
+                    author.Name)).ToList() 
             ))
             .ToListAsync(cancellationToken);
     }

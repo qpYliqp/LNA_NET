@@ -1,10 +1,8 @@
 ﻿using Application.DTOs.BookDTO;
 using Application.Features.Books.CreateBookWithAuthor;
-using Application.Features.Books.GetAllBookWithAuthor;
-using Application.IServices;
-using Domain.Entities;
-using Data.ImplRepositories;
-using Domain.IRepositories;
+using Application.Features.Books.GetAllBook;
+using Application.Features.Books.GetAllBookLetter;
+using Application.Features.Books.GetAllBookPreview;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +14,19 @@ public class BookController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;    
     
-    [HttpGet("getAllBookWithAuthor")]
-    public async Task<IActionResult> GetAllBookWithAuthorAsync()
+    [HttpGet]
+    public async Task<IActionResult> GetAllBookAsync()
     {
-        var query = new GetAllBookWithAuthorQuery(); 
+        var query = new GetAllBookQuery(); 
+        var result = await _mediator.Send(query);
+        return Ok(result);    
+    }
+    
+    
+    [HttpGet("preview")]
+    public async Task<IActionResult> GetAllBookPreviewAsync()
+    {
+        var query = new GetAllBookPreviewQuery(); 
         var result = await _mediator.Send(query);
         return Ok(result);    
     }
@@ -27,7 +34,7 @@ public class BookController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateBookWithAuthorAsync([FromBody] CreateBookRequestDto request)
     {
-        var query = new CreateBookWithAuthorQuery(request); 
+        var query = new CreateBookQuery(request); 
         var result = await _mediator.Send(query);
         return Ok(result);
     }
