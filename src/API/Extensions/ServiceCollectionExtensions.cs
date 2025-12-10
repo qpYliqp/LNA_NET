@@ -35,7 +35,7 @@ public static class ServiceCollectionExtensions
             var s3Config = new AmazonS3Config
             {
                 ServiceURL = minioSettings.Endpoint,
-                ForcePathStyle = true, // Important pour MinIO
+                ForcePathStyle = true,
                 UseHttp = true,
                 AuthenticationRegion = "us-east-1"
             };

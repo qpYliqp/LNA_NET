@@ -31,7 +31,8 @@ public class MinioService(IAmazonS3 s3Client,IOptions<MinioSettings> minioSettin
             {
                 BucketName = bucketName,
                 Key = fileName,
-                Expires = DateTime.Now.AddHours(24)
+                Expires = DateTime.Now.AddHours(24),
+                Protocol = Protocol.HTTP
             });
         }
         catch (Exception ex)
