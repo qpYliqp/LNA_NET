@@ -11,30 +11,48 @@ public class MinioService(IAmazonS3 s3Client,IOptions<MinioSettings> minioSettin
 {
     private readonly IAmazonS3 _s3Client =  s3Client;
     private readonly MinioSettings _minioSettings = minioSettings.Value;
-    
-
-    public Task<string?> getFileUrlByNameAsync(string fileName, BucketNames bName)
+    public async Task<string?> getFileUrlByNameAsync(string fileName, BucketNames bName)
     {
         string bucketKey = bName.ToString().ToLower();
 
         string? bucketName = _minioSettings.Buckets
             .FirstOrDefault(b => b.Name.Equals(bucketKey, StringComparison.OrdinalIgnoreCase))
-            ?.Name; 
+            ?.Name;
 
         if (string.IsNullOrEmpty(bucketName))
         {
-            throw new InvalidOperationException($"Le nom de bucket '{bucketKey}' n'a pas été trouvé dans la configuration MinioSettings.");
+            throw new InvalidOperationException(
+                $"Le nom de bucket '{bucketKey}' n'a pas été trouvé dans la configuration MinioSettings.");
         }
 
-        GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+        try
         {
-            BucketName = bucketName,
-            Key = fileName, 
-            Expires = DateTime.Now.AddHours(24)
-        };
-        
-        string url = _s3Client.GetPreSignedURL(request);
+            GetObjectMetadataRequest metaRequest = new GetObjectMetadataRequest
+            {
+                BucketName = bucketName,
+                Key = fileName
+            };
 
-        return Task.FromResult<string?>(url);
+            await _s3Client.GetObjectMetadataAsync(metaRequest);
+            
+            GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+            {
+                BucketName = bucketName,
+                Key = fileName,
+                Expires = DateTime.Now.AddHours(24)
+            };
+
+            return await _s3Client.GetPreSignedURLAsync(request);
+
+        }
+        catch (AmazonS3Exception ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur inattendue lors de la récupération de l'URL : {ex.Message}");
+            return null;
+        }
     }
 }

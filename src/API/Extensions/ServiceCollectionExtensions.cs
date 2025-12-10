@@ -15,6 +15,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IMinioInitializationService, MinioInitializationService>();
         services.AddScoped<IMinioService, MinioService>();
+        services.AddScoped<IBookService, BookService>();
         services.AddMediatR(cfg => 
             cfg.RegisterServicesFromAssembly(typeof(IMinioService).Assembly));
         

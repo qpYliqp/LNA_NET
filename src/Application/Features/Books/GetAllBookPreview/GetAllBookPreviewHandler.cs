@@ -9,12 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Books.GetAllBookPreview;
 
-public class GetAllBookPreviewHandler(AppDbContext dbContext, IMinioService minioService) : IRequestHandler<GetAllBookPreviewQuery, IReadOnlyList<BookPreviewDto>>
+public class GetAllBookPreviewHandler(AppDbContext dbContext, IBookService bookService) : IRequestHandler<GetAllBookPreviewQuery, IReadOnlyList<BookPreviewDto>>
 {
-    
     private readonly AppDbContext _dbContext = dbContext;
-    private readonly IMinioService _minioService = minioService;
-
+    private readonly IBookService _bookService = bookService;
     public async Task<IReadOnlyList<BookPreviewDto>> Handle(GetAllBookPreviewQuery request,
         CancellationToken cancellationToken)
     {
@@ -23,20 +21,16 @@ public class GetAllBookPreviewHandler(AppDbContext dbContext, IMinioService mini
             .Select(book => new 
             {
                 book.Id,
-                book.Title
+                book.Title,
+                book.CoverFileName
             })
             .ToListAsync(cancellationToken);
         
-        var bookPreviewTasks = booksWithFileName.Select(async book => 
-        {
-            string? coverUrl = await _minioService.getFileUrlByNameAsync("bk1.jpg", BucketNames.Cover);
-            return new BookPreviewDto(
-                book.Id,
-                book.Title,
-                coverUrl
-            );
-        });
-        
+        var bookPreviewTasks = booksWithFileName.Select(async book => new BookPreviewDto(
+            book.Id,
+            book.Title,
+            await _bookService.GetBookCoverAsync(book.CoverFileName)
+        ));
         return await Task.WhenAll(bookPreviewTasks);
     }
     

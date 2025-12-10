@@ -8,9 +8,7 @@ namespace Application.Features.Books.GetAllBook;
 
 public class GetAllBookHandler(AppDbContext dbContext) : IRequestHandler<GetAllBookQuery, IReadOnlyList<BookDto>>
 {
-    
     private readonly AppDbContext _dbContext = dbContext;
-
     public async Task<IReadOnlyList<BookDto>> Handle(GetAllBookQuery request,
         CancellationToken cancellationToken)
     {
@@ -25,5 +23,4 @@ public class GetAllBookHandler(AppDbContext dbContext) : IRequestHandler<GetAllB
             ))
             .ToListAsync(cancellationToken);
     }
-    
 }

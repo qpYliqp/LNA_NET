@@ -7,6 +7,6 @@ namespace Application.DTOs.BookDTO
     public record BookPreviewDto(
         int Id,
         string Title,
-        string CoverFileUrl
+        string? CoverFileUrl
         );
 }
