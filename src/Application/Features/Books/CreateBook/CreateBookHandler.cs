@@ -5,7 +5,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Features.Books.CreateBookWithAuthor;
+namespace Application.Features.Books.CreateBook;
 
 public class CreateBookHandler(AppDbContext dbContext) 
     : IRequestHandler<CreateBookQuery, BookDto> // <-- Gère maintenant la Command

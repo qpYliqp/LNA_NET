@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.BookDTO;
-using Application.Features.Books.CreateBookWithAuthor;
+using Application.Features.Books.CreateBook;
 using Application.Features.Books.GetAllBook;
 using Application.Features.Books.GetAllBookLetter;
 using Application.Features.Books.GetAllBookPreview;
@@ -32,7 +32,7 @@ public class BookController(IMediator mediator) : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> CreateBookWithAuthorAsync([FromBody] CreateBookRequestDto request)
+    public async Task<IActionResult> CreateBook([FromBody] CreateBookRequestDto request)
     {
         var query = new CreateBookQuery(request); 
         var result = await _mediator.Send(query);
