@@ -16,10 +16,10 @@ public class BookController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;    
     
-    [HttpGet("getAllBookWithAuthor")]
-    public async Task<IActionResult> GetAllBookWithAuthorAsync()
+    [HttpGet()]
+    public async Task<IActionResult> GetAllBookWithAuthorAsync([FromQuery] string? prefix)
     {
-        var query = new GetAllBookWithAuthorQuery(); 
+        var query = new GetAllBookWithAuthorQuery(prefix); 
         var result = await _mediator.Send(query);
         return Ok(result);    
     }
