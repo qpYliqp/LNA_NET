@@ -16,7 +16,7 @@ public class GetAllBookPreviewHandler(AppDbContext dbContext, IBookService bookS
     public async Task<IReadOnlyList<BookPreviewDto>> Handle(GetAllBookPreviewQuery request,
         CancellationToken cancellationToken)
     {
-        var booksWithFileName = await _dbContext.Books
+        var books = await _dbContext.Books
             .Include(b => b.Authors) 
             .Select(book => new 
             {
@@ -26,7 +26,7 @@ public class GetAllBookPreviewHandler(AppDbContext dbContext, IBookService bookS
             })
             .ToListAsync(cancellationToken);
         
-        var bookPreviewTasks = booksWithFileName.Select(async book => new BookPreviewDto(
+        var bookPreviewTasks = books.Select(async book => new BookPreviewDto(
             book.Id,
             book.Title,
             await _bookService.GetBookCoverAsync(book.CoverFileName)

@@ -11,7 +11,7 @@ public class MinioService(IAmazonS3 s3Client,IOptions<MinioSettings> minioSettin
 {
     private readonly IAmazonS3 _s3Client =  s3Client;
     private readonly MinioSettings _minioSettings = minioSettings.Value;
-    public async Task<string?> getFileUrlByNameAsync(string fileName, BucketNames bName)
+    public async Task<string?> GetFileUrlByNameAsync(string fileName, BucketNames bName)
     {
         string bucketKey = bName.ToString().ToLower();
         string? bucketName = _minioSettings.Buckets

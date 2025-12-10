@@ -4,5 +4,5 @@ namespace Application.IServices;
 
 public interface IMinioService
 {
-    public Task<string?> getFileUrlByNameAsync(string fileName, BucketNames bucketName);
+    public Task<string?> GetFileUrlByNameAsync(string fileName, BucketNames bucketName);
 }

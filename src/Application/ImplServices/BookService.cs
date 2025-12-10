@@ -11,7 +11,7 @@ public class BookService(IMinioService minioService) : IBookService
         string? coverUrl = null;
         if (coverFileName != null)
         {
-            coverUrl = await _minioService.getFileUrlByNameAsync(coverFileName, BucketNames.Cover);
+            coverUrl = await _minioService.GetFileUrlByNameAsync(coverFileName, BucketNames.Cover);
         }
         return coverUrl;
     }
