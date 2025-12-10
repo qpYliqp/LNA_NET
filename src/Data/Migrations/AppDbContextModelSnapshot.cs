@@ -114,6 +114,55 @@ namespace Data.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("Domain.Entities.BookStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ProductionStepId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductionStepId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("BookId", "ProductionStepId")
+                        .IsUnique();
+
+                    b.ToTable("BookStep");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProductionStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductionStep");
+                });
+
             modelBuilder.Entity("Domain.Entities.Status", b =>
                 {
                     b.Property<int>("Id")
@@ -144,6 +193,38 @@ namespace Data.Migrations
                         .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.BookStep", b =>
+                {
+                    b.HasOne("Domain.Entities.Book", "Book")
+                        .WithMany("BookSteps")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ProductionStep", "ProductionStep")
+                        .WithMany()
+                        .HasForeignKey("ProductionStepId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("ProductionStep");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Book", b =>
+                {
+                    b.Navigation("BookSteps");
                 });
 #pragma warning restore 612, 618
         }
