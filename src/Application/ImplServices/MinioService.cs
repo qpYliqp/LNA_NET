@@ -14,44 +14,28 @@ public class MinioService(IAmazonS3 s3Client,IOptions<MinioSettings> minioSettin
     public async Task<string?> getFileUrlByNameAsync(string fileName, BucketNames bName)
     {
         string bucketKey = bName.ToString().ToLower();
-
         string? bucketName = _minioSettings.Buckets
-            .FirstOrDefault(b => b.Name.Equals(bucketKey, StringComparison.OrdinalIgnoreCase))
-            ?.Name;
-
-        if (string.IsNullOrEmpty(bucketName))
-        {
-            throw new InvalidOperationException(
-                $"Le nom de bucket '{bucketKey}' n'a pas été trouvé dans la configuration MinioSettings.");
-        }
-
+                                 .FirstOrDefault(b => b.Name.Equals(bucketKey, StringComparison.OrdinalIgnoreCase))
+                                 ?.Name
+                             ?? throw new InvalidOperationException(
+                                 $"Le nom de bucket '{bucketKey}' n'a pas été trouvé dans la configuration MinioSettings.");
         try
         {
-            GetObjectMetadataRequest metaRequest = new GetObjectMetadataRequest
+            await _s3Client.GetObjectMetadataAsync(new GetObjectMetadataRequest
             {
                 BucketName = bucketName,
                 Key = fileName
-            };
+            });
 
-            await _s3Client.GetObjectMetadataAsync(metaRequest);
-            
-            GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+            return await _s3Client.GetPreSignedURLAsync(new GetPreSignedUrlRequest
             {
                 BucketName = bucketName,
                 Key = fileName,
                 Expires = DateTime.Now.AddHours(24)
-            };
-
-            return await _s3Client.GetPreSignedURLAsync(request);
-
-        }
-        catch (AmazonS3Exception ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-        {
-            return null;
+            });
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur inattendue lors de la récupération de l'URL : {ex.Message}");
             return null;
         }
     }

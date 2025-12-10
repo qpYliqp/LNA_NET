@@ -2,6 +2,7 @@
 using Application.Configuration;
 using Application.ImplServices;
 using Application.IServices;
+using Microsoft.Extensions.Options;
 
 namespace API.Extensions;
 using Domain.IRepositories;
@@ -27,17 +28,23 @@ public static class ServiceCollectionExtensions
         services.Configure<MinioSettings>(
             configuration.GetSection("MinioSettings"));
 
-        var s3Config = new AmazonS3Config
+        services.AddSingleton<IAmazonS3>(serviceProvider =>
         {
-            ServiceURL = endpointUrl,
-            //Permet d'adresser directement les buckets
-            //Permet au sdk C# de génèrer l'URL dans le bon format
-            ForcePathStyle = true,
-            UseHttp = true,
-            AuthenticationRegion = "us-east-1"
-        };
-        services.AddSingleton<IAmazonS3>(sp =>
-            new AmazonS3Client(accessKey, secretKey, s3Config));
+            var minioSettings = serviceProvider.GetRequiredService<IOptions<MinioSettings>>().Value;
+
+            var s3Config = new AmazonS3Config
+            {
+                ServiceURL = minioSettings.Endpoint,
+                ForcePathStyle = true, // Important pour MinIO
+                UseHttp = true,
+                AuthenticationRegion = "us-east-1"
+            };
+            return new AmazonS3Client(
+                minioSettings.AccessKey,
+                minioSettings.SecretKey,
+                s3Config
+            );
+        });
         
         return services;
     }
