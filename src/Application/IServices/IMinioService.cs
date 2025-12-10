@@ -1,6 +1,8 @@
-﻿namespace Application.IServices;
+﻿using Application.Enumerations;
 
-public class IMinioService
+namespace Application.IServices;
+
+public interface IMinioService
 {
-    
+    public Task<string?> getFileUrlByNameAsync(string fileName, BucketNames bucketName);
 }

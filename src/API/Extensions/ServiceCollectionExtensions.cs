@@ -1,4 +1,5 @@
 ﻿using Amazon.S3;
+using Application.Configuration;
 using Application.ImplServices;
 using Application.IServices;
 
@@ -15,12 +16,15 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMinioInitializationService, MinioInitializationService>();
         services.AddScoped<IMinioService, MinioService>();
         services.AddMediatR(cfg => 
-            cfg.RegisterServicesFromAssembly(typeof(IBookService).Assembly));
+            cfg.RegisterServicesFromAssembly(typeof(IMinioService).Assembly));
         
         var minioConfig = configuration.GetSection("MinioSettings");
         var endpointUrl = minioConfig["Endpoint"];
         var accessKey = minioConfig["AccessKey"];
         var secretKey = minioConfig["SecretKey"];
+        
+        services.Configure<MinioSettings>(
+            configuration.GetSection("MinioSettings"));
 
         var s3Config = new AmazonS3Config
         {
@@ -29,7 +33,7 @@ public static class ServiceCollectionExtensions
             //Permet au sdk C# de génèrer l'URL dans le bon format
             ForcePathStyle = true,
             UseHttp = true,
-            AuthenticationRegion = "es-east-1"
+            AuthenticationRegion = "us-east-1"
         };
         services.AddSingleton<IAmazonS3>(sp =>
             new AmazonS3Client(accessKey, secretKey, s3Config));
