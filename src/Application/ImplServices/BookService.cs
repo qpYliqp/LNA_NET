@@ -1,29 +1,19 @@
-﻿using Application.DTOs.AuthorDTO;
-using Application.DTOs.BookDTO;
+﻿using Application.Enumerations;
 using Application.IServices;
-using Data;
-using Domain.IRepositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.ImplServices;
 
-public class BookService(AppDbContext dbContext) : IBookService{
-    
-    private readonly AppDbContext _dbContext = dbContext;
-
-    public async Task<IReadOnlyList<BookWithAuthorDto>> GetAllBookWithAuthor()
+public class BookService(IMinioService minioService) : IBookService
+{
+    private readonly IMinioService _minioService = minioService;
+    public async Task<string?> GetBookCoverAsync(string? coverFileName)
     {
-        return await _dbContext.Books
-            .Include(b => b.Authors) 
-            .Select(book => new BookWithAuthorDto(
-                book.Id,
-                book.Title,
-                book.Authors.Select(author => new AuthorDto(
-                    author.Id,
-                    author.Name
-                )).ToList() 
-            ))
-            .ToListAsync();
+        string? coverUrl = null;
+        if (coverFileName != null)
+        {
+            coverUrl = await _minioService.GetFileUrlByNameAsync(coverFileName, BucketNames.Cover);
+        }
+        return coverUrl;
     }
     
 }

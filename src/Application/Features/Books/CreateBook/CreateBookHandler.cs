@@ -1,19 +1,18 @@
 ﻿using Application.DTOs.AuthorDTO;
 using Application.DTOs.BookDTO;
-using Application.Features.Books.GetAllBookWithAuthor;
 using Data;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Features.Books.CreateBookWithAuthor;
+namespace Application.Features.Books.CreateBook;
 
-public class CreateBookWithAuthorHandler(AppDbContext dbContext) 
-    : IRequestHandler<CreateBookWithAuthorQuery, BookWithAuthorDto> // <-- Gère maintenant la Command
+public class CreateBookHandler(AppDbContext dbContext) 
+    : IRequestHandler<CreateBookQuery, BookDto> // <-- Gère maintenant la Command
 {
     private readonly AppDbContext _dbContext = dbContext;
 
-    public async Task<BookWithAuthorDto> Handle(CreateBookWithAuthorQuery query, CancellationToken cancellationToken)
+    public async Task<BookDto> Handle(CreateBookQuery query, CancellationToken cancellationToken)
     {
         var request = query.BookDetails; 
         
@@ -30,6 +29,6 @@ public class CreateBookWithAuthorHandler(AppDbContext dbContext)
         _dbContext.Set<Book>().Add(book);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new BookWithAuthorDto(book.Id, book.Title, book.Authors.Select(a => new AuthorDto(a.Id,a.Name)).ToList());
+        return new BookDto(book.Id, book.Title, book.Authors.Select(a => new AuthorDto(a.Id,a.Name)).ToList());
     }
 }

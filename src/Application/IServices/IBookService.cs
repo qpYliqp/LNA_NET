@@ -1,11 +1,6 @@
-﻿using Application.DTOs.BookDTO;
-using Domain.Entities;
-
-namespace Application.IServices;
+﻿namespace Application.IServices;
 
 public interface IBookService
 {
-    
-    public Task<IReadOnlyList<BookWithAuthorDto>> GetAllBookWithAuthor();
-    
+    public Task<string?> GetBookCoverAsync(string? coverFileName);
 }
