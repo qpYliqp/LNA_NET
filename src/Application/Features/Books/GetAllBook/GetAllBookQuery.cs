@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Application.Features.Books.GetAllBook;
 
- public record GetAllBookQuery() 
+ public record GetAllBookQuery(string? prefix) 
         : IRequest<IReadOnlyList<BookDto>>;

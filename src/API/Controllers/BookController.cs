@@ -14,14 +14,13 @@ public class BookController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;    
     
-    [HttpGet]
-    public async Task<IActionResult> GetAllBookAsync()
+    [HttpGet()]
+    public async Task<IActionResult> GetAllBookAsync([FromQuery] string? prefix)
     {
-        var query = new GetAllBookQuery(); 
+        var query = new GetAllBookQuery(prefix); 
         var result = await _mediator.Send(query);
         return Ok(result);    
     }
-    
     
     [HttpGet("preview")]
     public async Task<IActionResult> GetAllBookPreviewAsync()
@@ -30,6 +29,7 @@ public class BookController(IMediator mediator) : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);    
     }
+
     
     [HttpPost]
     public async Task<IActionResult> CreateBook([FromBody] CreateBookRequestDto request)
