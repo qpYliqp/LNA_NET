@@ -16,4 +16,6 @@ public class Book
     public ICollection<Author>? Authors { get; set; } = new List<Author>();
     public string? CoverFileName { get; set; }
     public DateTime? ReleaseDate { get; set; }
+    
+    public ICollection<BookStep>? BookSteps { get; set; } = new List<BookStep>();
 }
