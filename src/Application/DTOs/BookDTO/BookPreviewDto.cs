@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Entities;
 
 namespace Application.DTOs.BookDTO
 {
@@ -8,5 +9,5 @@ namespace Application.DTOs.BookDTO
         int Id,
         string Title,
         string? CoverFileUrl
-        );
+    );
 }

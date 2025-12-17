@@ -34,7 +34,7 @@ public class BookController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateBook([FromBody] CreateBookRequestDto request)
     {
-        var query = new CreateBookQuery(request); 
+        var query = new CreateBookCommand(request); 
         var result = await _mediator.Send(query);
         return Ok(result);
     }

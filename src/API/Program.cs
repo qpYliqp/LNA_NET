@@ -3,6 +3,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Amazon.S3;
 using Amazon.S3.Model;
+using API.Middlewares;
 using Application.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,7 +46,7 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred Minio Bucket Initialization.");
     }
 }
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

@@ -1,5 +1,9 @@
-﻿using Application.Enumerations;
+﻿using Application.DTOs.BookDTO;
+using Application.DTOs.BookStepDTO;
+using Application.Enumerations;
 using Application.IServices;
+using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.ImplServices;
 
@@ -15,5 +19,19 @@ public class BookService(IMinioService minioService) : IBookService
         }
         return coverUrl;
     }
+
+    public void ConfigureBookSteps(Book book, ICollection<CreateBookStepDto> bookSteps)
+    {
+        foreach (var step in bookSteps)
+        {
+            if (step.EndDate > book.ReleaseDate)
+            {
+                throw new BadHttpRequestException(
+                    "Une étape de production ne peut avoir une date supérieure à la date de sortie du livre");
+            }
+            book.BookSteps.Add(step.ToEntity());
+        }
+    }
+
     
 }

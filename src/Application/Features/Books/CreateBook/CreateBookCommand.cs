@@ -4,6 +4,6 @@ using MediatR;
 namespace Application.Features.Books.CreateBook;
 
 
-public record CreateBookQuery(
+public record CreateBookCommand(
     CreateBookRequestDto BookDetails
 ) : IRequest<BookDto>;
