@@ -8,21 +8,21 @@ namespace Application.Mappers;
 public static class BookMappingExtension
 {
     // L'expression de projection (pour IQueryable / SQL)
-    public static Expression<Func<Book, BookDto>> ProjectToDto =>
+    private static Expression<Func<Book, BookDto>> ProjectToDto =>
         book => new BookDto(
-            book.Id,
-            book.Title,
-            book.Isbn,
-            book.Nuart,
-            book.Pages,
-            book.Price,
-            book.Note,
-            book.Summary,
-            book.Hook,
-            book.Marketing,
-            book.CoverFileName,
-            book.ReleaseDate,
-            book.Authors.Select(author => new AuthorDto(
+            Id : book.Id,
+            Title : book.Title,
+            Isbn: book.Isbn,
+            Nuart: book.Nuart,
+            Pages: book.Pages,
+            Price: book.Price,
+            Note: book.Note,
+            Summary: book.Summary,
+            Hook: book.Hook,
+            Marketing: book.Marketing,
+            CoverFileName: book.CoverFileName,
+            ReleaseDate: book.ReleaseDate,
+            Authors: book.Authors.Select(author => new AuthorDto(
                 author.Id,
                 author.Name
             )).ToList()

@@ -21,6 +21,7 @@ public class GetAllBookHandler(AppDbContext dbContext) : IRequestHandler<GetAllB
      var spec = SpecBuilder<Book>.Create().StartsWith(request.prefix);
 
      return await _dbContext.Books
+        //AsNoTracking --> Indique que c'est en lecture seule
          .AsNoTracking()
          .AsSplitQuery()
          .Where(spec.Predicate)
