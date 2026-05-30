@@ -1,5 +1,6 @@
-﻿using System.Net;
+using System.Net;
 using System.Text.Json;
+using Domain.Models;
 
 namespace API.Middlewares;
 
@@ -7,11 +8,16 @@ public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+    private readonly IHostEnvironment _environment;
 
-    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+    public ExceptionHandlingMiddleware(
+        RequestDelegate next,
+        ILogger<ExceptionHandlingMiddleware> logger,
+        IHostEnvironment environment)
     {
-        _next = next;       // Le pointeur vers la suite du programme
-        _logger = logger;   // Pour logger l'erreur dans la console serveur
+        _next = next;
+        _logger = logger;
+        _environment = environment;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -27,19 +33,28 @@ public class ExceptionHandlingMiddleware
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
+        var statusCode = exception switch
+        {
+            BookDomainException => HttpStatusCode.BadRequest,
+            KeyNotFoundException => HttpStatusCode.NotFound,
+            _ => HttpStatusCode.InternalServerError
+        };
+
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        context.Response.StatusCode = (int)statusCode;
 
         var response = new
         {
             StatusCode = context.Response.StatusCode,
-            Message = exception.Message,
-            Detailed = exception.StackTrace // dangereux en prod
+            Message = statusCode == HttpStatusCode.InternalServerError
+                ? "Une erreur interne est survenue."
+                : exception.Message,
+            // La stack trace n'est exposée qu'en développement.
+            Detailed = _environment.IsDevelopment() ? exception.StackTrace : null
         };
 
-        var jsonResponse = JsonSerializer.Serialize(response);
-        return context.Response.WriteAsync(jsonResponse);
+        return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 }
